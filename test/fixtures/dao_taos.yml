@@ -1,0 +1,9 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  thongke_id: 1
+  tenant_id: 1
+
+two:
+  thongke_id: 1
+  tenant_id: 1

@@ -11,7 +11,14 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20131218014316) do
+ActiveRecord::Schema.define(:version => 20131218023853) do
+
+  create_table "dao_taos", :force => true do |t|
+    t.integer  "thongke_id"
+    t.integer  "tenant_id"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
+  end
 
   create_table "tenants", :force => true do |t|
     t.string   "khoa"
@@ -19,6 +26,13 @@ ActiveRecord::Schema.define(:version => 20131218014316) do
     t.string   "nganh"
     t.integer  "hoc_ky"
     t.string   "nam_hoc"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
+  end
+
+  create_table "thay_thes", :force => true do |t|
+    t.integer  "from_id"
+    t.integer  "dest_id"
     t.datetime "created_at", :null => false
     t.datetime "updated_at", :null => false
   end
@@ -37,6 +51,7 @@ ActiveRecord::Schema.define(:version => 20131218014316) do
     t.text     "co_the_thay_the"
     t.datetime "created_at",      :null => false
     t.datetime "updated_at",      :null => false
+    t.integer  "tenant_id"
   end
 
 end
