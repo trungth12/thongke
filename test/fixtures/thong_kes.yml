@@ -1,0 +1,27 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  ma_mon: MyString
+  ten_mon: MyString
+  level: 1
+  tu_chon: false
+  so_tim: 1
+  so_vang: 1
+  so_do: 1
+  so_danghoc: 1
+  so_daqua: 1
+  thuoc_ctdt: MyString
+  co_the_thay_the: MyText
+
+two:
+  ma_mon: MyString
+  ten_mon: MyString
+  level: 1
+  tu_chon: false
+  so_tim: 1
+  so_vang: 1
+  so_do: 1
+  so_danghoc: 1
+  so_daqua: 1
+  thuoc_ctdt: MyString
+  co_the_thay_the: MyText

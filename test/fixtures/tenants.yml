@@ -1,0 +1,15 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  khoa: MyString
+  he: MyString
+  nganh: MyString
+  hoc_ky: 1
+  nam_hoc: MyString
+
+two:
+  khoa: MyString
+  he: MyString
+  nganh: MyString
+  hoc_ky: 1
+  nam_hoc: MyString
