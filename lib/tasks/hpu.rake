@@ -3,6 +3,24 @@ require 'job'
 
 namespace :hpu do
   desc "TODO"
+  task :load_capnhatdaotao => :environment do 
+  	ThongKe.all.each do |tk|
+  		mon = tk.ma_mon
+  		as = ThongKe.where(ma_mon: mon).pluck(:tenant_id).uniq
+  		tt = ThayThe.where(from_id: tk.id).pluck(:dest_id).uniq
+  		if as.count > 0  or tt.count > 0	
+  			if as.count > 0	
+	  			tns = Tenant.find(as).map {|p| {id: p.id, khoa: p.khoa, he: p.he, nganh: p.nganh} }
+	  			tk.thuoc_ctdt = tns.to_json
+  			end
+  			if tt.count > 0
+  				tts = ThongKe.find(tt).map { |p| {id: p.id, ma_mon: p.ma_mon, ten_mon: p.ten_mon} }
+  				tk.co_the_thay_the = tts.to_json
+  			end
+  			tk.save!
+  		end
+  	end
+  end
   task :load_monthaythe => :environment do 
   	@client = Savon.client(wsdl: "http://10.1.0.238:8082/HPUWebService.asmx?wsdl")    
   	response = @client.call(:mon_thay_the_khoa_he_nganh)      
