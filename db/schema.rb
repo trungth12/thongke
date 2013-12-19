@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20131218023853) do
+ActiveRecord::Schema.define(:version => 20131219025030) do
 
   create_table "dao_taos", :force => true do |t|
     t.integer  "thongke_id"
@@ -52,6 +52,10 @@ ActiveRecord::Schema.define(:version => 20131218023853) do
     t.datetime "created_at",      :null => false
     t.datetime "updated_at",      :null => false
     t.integer  "tenant_id"
+    t.integer  "so_sv"
+    t.text     "sv"
+    t.integer  "dao_tao_id"
+    t.integer  "thay_the_id"
   end
 
 end
