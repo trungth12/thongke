@@ -26,6 +26,7 @@ gem 'rails_12factor', '0.0.2'
 gem 'savon'
 gem 'rest-client'
 gem "active_model_serializers"
+gem 'activerecord-postgresql-adapter'
 # To use ActiveModel has_secure_password
 # gem 'bcrypt-ruby', '~> 3.0.0'
 
