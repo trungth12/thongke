@@ -8,7 +8,7 @@ class Job
    # @no, '#CCCC00'
    # @duocdangky, '#9900FF'
     @status = {'#FF0000' => 1, '#CCCC00' => 2, '#0033FF' => 3, '#006666' => 4, '#9900FF' => 5}
-    @client = Savon.client(wsdl: "http://10.1.0.238:8082/HPUWebService.asmx?wsdl")    
+    @client = Savon.client(wsdl: "http://10.1.0.236:8088/HPUWebService.asmx?wsdl")    
   end 
   def load_sv(ma_khoa_hoc, ma_he_dao_tao, ma_nganh)    
     response = @client.call(:sinh_vien_khoa_he_nganh) do 
@@ -30,7 +30,7 @@ class Job
     return nil if svs.count == 0
     @result = []
     svs.each do |sv|
-      tmp = RestClient.get "http://localhost:9495/127.0.0.1/#{sv}"
+      tmp = RestClient.get "http://localhost:8181/127.0.0.1/#{sv}"
       @result += JSON.parse(tmp)["nodes"]  
       @result.map {|t| t["ma_sinh_vien"] = sv ; t["status"] = @status[t["color"]];t}            
     end        

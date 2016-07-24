@@ -22,7 +22,7 @@ namespace :hpu do
   	end
   end
   task :load_monthaythe => :environment do 
-  	@client = Savon.client(wsdl: "http://10.1.0.238:8082/HPUWebService.asmx?wsdl")    
+  	@client = Savon.client(wsdl: "http://10.1.0.236:8088/HPUWebService.asmx?wsdl")    
   	response = @client.call(:mon_thay_the_khoa_he_nganh)      
     res_hash = response.body.to_hash
     result = res_hash[:mon_thay_the_khoa_he_nganh_response][:mon_thay_the_khoa_he_nganh_result][:diffgram][:document_element][:mon_thay_the_khoa_he_nganh]
@@ -48,7 +48,7 @@ namespace :hpu do
     end
   end
   task :load_khoahenganh => :environment do
-  	@client = Savon.client(wsdl: "http://10.1.0.238:8082/HPUWebService.asmx?wsdl")    
+  	@client = Savon.client(wsdl: "http://10.1.0.236:8088/HPUWebService.asmx?wsdl")    
   	response = @client.call(:danh_sach_cac_mon_theo_khoa_he_nganh)      
     res_hash = response.body.to_hash
     result = res_hash[:danh_sach_cac_mon_theo_khoa_he_nganh_response][:danh_sach_cac_mon_theo_khoa_he_nganh_result][:diffgram][:document_element][:danh_sach_cac_mon_theo_khoa_he_nganh]
@@ -67,7 +67,7 @@ namespace :hpu do
 
   task :load_status => :environment do 
   	status = {'#FF0000' => 1, '#CCCC00' => 2, '#0033FF' => 3, '#006666' => 4, '#9900FF' => 5}
-    client = Savon.client(wsdl: "http://10.1.0.238:8082/HPUWebService.asmx?wsdl")
+    client = Savon.client(wsdl: "http://10.1.0.236:8088/HPUWebService.asmx?wsdl")
   	Tenant.all.each do |tenant|
   		c1 = (tenant.thong_kes.where('level is not null').count || 0)
   		c2 = (count(client, tenant.khoa, tenant.he, tenant.nganh, status) || 0)
@@ -129,7 +129,7 @@ namespace :hpu do
     svs = load_sv(client, ma_khoa_hoc, ma_he_dao_tao, ma_nganh, status)
     return nil if svs.count == 0   
     sv = svs[0]    
-    tmp = RestClient.get "http://localhost:9495/127.0.0.1/#{sv}"
+    tmp = RestClient.get "http://localhost:8181/127.0.0.1/#{sv}"
     result = JSON.parse(tmp)["nodes"]  
     #return 0 if result.nil
 	return result.count    
@@ -141,7 +141,7 @@ namespace :hpu do
     return nil if svs.count == 0
     @result = []
     svs.each do |sv|
-      tmp = RestClient.get "http://localhost:9495/127.0.0.1/#{sv}"
+      tmp = RestClient.get "http://localhost:8181/127.0.0.1/#{sv}"
       @result += JSON.parse(tmp)["nodes"]  
       @result.map {|t| t["ma_sinh_vien"] = sv ; t["status"] = status[t["color"]];t}            
     end        

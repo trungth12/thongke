@@ -26,8 +26,8 @@ production:
   adapter: postgresql
   host: localhost
   port: 5432
-  username: dungth
-  password: dungth123654
+  username: postgres
+  password: 123456
   database: thongke_production
   pool: 5
   timeout: 5000
