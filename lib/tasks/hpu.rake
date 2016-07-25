@@ -35,8 +35,8 @@ namespace :hpu do
 	    he2 = r[:ma_he_dao_tao2].to_s.strip.upcase
 	    nganh2 = r[:ma_nganh2].to_s.strip.upcase
 	    ma_mon2 = r[:ma_mon_hoc2].to_s.strip.upcase
-	    tenant = Tenant.where(khoa: khoa, he: he, nganh: nganh, nam_hoc: "2013-2014", hoc_ky: 1).first
-	    tenant2 = Tenant.where(khoa: khoa2, he: he2, nganh: nganh2, nam_hoc: "2013-2014", hoc_ky: 1).first
+	    tenant = Tenant.where(khoa: khoa, he: he, nganh: nganh, nam_hoc: "2015-2016", hoc_ky: 1).first
+	    tenant2 = Tenant.where(khoa: khoa2, he: he2, nganh: nganh2, nam_hoc: "2015-2016", hoc_ky: 1).first
 	    if tenant and tenant2	    	
 	    	tk1 = tenant.thong_kes.where(ma_mon: ma_mon).first
 	    	tk2 = tenant2.thong_kes.where(ma_mon: ma_mon2).first
@@ -58,7 +58,7 @@ namespace :hpu do
 	    nganh = r[:ma_nganh].to_s.strip.upcase
 	    ma_mon = r[:ma_mon_hoc].to_s.strip.upcase
 	    ten_mon = r[:ten_mon_hoc].strip
-	  	tenant = Tenant.where(khoa: khoa, he: he, nganh: nganh, nam_hoc: "2013-2014", hoc_ky: 1).first_or_create!
+	  	tenant = Tenant.where(khoa: khoa, he: he, nganh: nganh, nam_hoc: "2015-2016", hoc_ky: 1).first_or_create!
 	  	if tenant
 	  		tenant.thong_kes.where(ma_mon: ma_mon, ten_mon: ten_mon).first_or_create!
 	  	end
@@ -129,7 +129,7 @@ namespace :hpu do
     svs = load_sv(client, ma_khoa_hoc, ma_he_dao_tao, ma_nganh, status)
     return nil if svs.count == 0   
     sv = svs[0]    
-    tmp = RestClient.get "http://localhost:8181/127.0.0.1/#{sv}"
+    tmp = RestClient.get "http://localhost:8181/get/#{sv}"
     result = JSON.parse(tmp)["nodes"]  
     #return 0 if result.nil
 	return result.count    
@@ -141,7 +141,7 @@ namespace :hpu do
     return nil if svs.count == 0
     @result = []
     svs.each do |sv|
-      tmp = RestClient.get "http://localhost:8181/127.0.0.1/#{sv}"
+      tmp = RestClient.get "http://localhost:8181/get/#{sv}"
       @result += JSON.parse(tmp)["nodes"]  
       @result.map {|t| t["ma_sinh_vien"] = sv ; t["status"] = status[t["color"]];t}            
     end        
