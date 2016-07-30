@@ -4,12 +4,12 @@ one:
   khoa: MyString
   he: MyString
   nganh: MyString
-  hoc_ky: 1
+  hoc_ky: 2
   nam_hoc: MyString
 
 two:
   khoa: MyString
   he: MyString
   nganh: MyString
-  hoc_ky: 1
+  hoc_ky: 2
   nam_hoc: MyString

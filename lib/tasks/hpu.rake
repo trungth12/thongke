@@ -35,8 +35,8 @@ namespace :hpu do
 	    he2 = r[:ma_he_dao_tao2].to_s.strip.upcase
 	    nganh2 = r[:ma_nganh2].to_s.strip.upcase
 	    ma_mon2 = r[:ma_mon_hoc2].to_s.strip.upcase
-	    tenant = Tenant.where(khoa: khoa, he: he, nganh: nganh, nam_hoc: "2015-2016", hoc_ky: 1).first
-	    tenant2 = Tenant.where(khoa: khoa2, he: he2, nganh: nganh2, nam_hoc: "2015-2016", hoc_ky: 1).first
+	    tenant = Tenant.where(khoa: khoa, he: he, nganh: nganh, nam_hoc: "2015-2016", hoc_ky: 2).first
+	    tenant2 = Tenant.where(khoa: khoa2, he: he2, nganh: nganh2, nam_hoc: "2015-2016", hoc_ky: 2).first
 	    if tenant and tenant2	    	
 	    	tk1 = tenant.thong_kes.where(ma_mon: ma_mon).first
 	    	tk2 = tenant2.thong_kes.where(ma_mon: ma_mon2).first
@@ -58,9 +58,10 @@ namespace :hpu do
 	    nganh = r[:ma_nganh].to_s.strip.upcase
 	    ma_mon = r[:ma_mon_hoc].to_s.strip.upcase
 	    ten_mon = r[:ten_mon_hoc].strip
-	  	tenant = Tenant.where(khoa: khoa, he: he, nganh: nganh, nam_hoc: "2015-2016", hoc_ky: 1).first_or_create!
+	  	tenant = Tenant.where(khoa: khoa, he: he, nganh: nganh, nam_hoc: "2015-2016", hoc_ky: 2).first_or_create!
 	  	if tenant
 	  		tenant.thong_kes.where(ma_mon: ma_mon, ten_mon: ten_mon).first_or_create!
+        puts tenant.id
 	  	end
   	end
   end
@@ -69,16 +70,23 @@ namespace :hpu do
   	status = {'#FF0000' => 1, '#CCCC00' => 2, '#0033FF' => 3, '#006666' => 4, '#9900FF' => 5}
     client = Savon.client(wsdl: "http://10.1.0.236:8088/HPUWebService.asmx?wsdl")
   	Tenant.all.each do |tenant|
-  		c1 = (tenant.thong_kes.where('level is not null').count || 0)
+      c1 = (tenant.thong_kes.where('level is not null').count || 0)
   		c2 = (count(client, tenant.khoa, tenant.he, tenant.nganh, status) || 0)
-  		if c1 < c2  		
+  		
+      if tenant.khoa = 19 
+        puts c1
+        puts c2
+      end
+
+      if c1 < c2  		
 	  		res = process(client, tenant.khoa, tenant.he, tenant.nganh, status)  	
 	  		if res and res.count > 0
 		  		tres = transform(res)	
 		  		if tres.count > 0
 		  			tres.each do |r|
 		  				tk = tenant.thong_kes.where(ma_mon: r[:key][1].upcase).first	  				
-		  				tk.level = r[:key][0].to_i
+		  				if !tk.nil? then
+              tk.level = r[:key][0].to_i
 		  				tk.tu_chon = (r[:value][0]["tuchon"].to_i > 0)
 		  				tk.so_tim = r[:so_tim].count
 		  				tk.so_do = r[:so_do].count
@@ -95,6 +103,7 @@ namespace :hpu do
 		  				.to_json
 		  				tk.save!
 		  			end
+          end
 		  		end
 		  	end
 		end
@@ -112,26 +121,32 @@ namespace :hpu do
     res_hash = response.body.to_hash
     result = res_hash[:sinh_vien_khoa_he_nganh_response][:sinh_vien_khoa_he_nganh_result][:diffgram][:document_element]
     if (result ) then 
-		temp = result[:sinh_vien_khoa_he_nganh];
-		if (temp.is_a?(Hash)) then 
-			result = Array.new
-			result.push(temp);
-		else (temp.is_a?(Array))
-			result = temp;
-		end		
-	end
+		  temp = result[:sinh_vien_khoa_he_nganh];
+        #temp = result;
+		    if (temp.is_a?(Hash)) then 
+			     result = Array.new
+			     result.push(temp);
+		    else (temp.is_a?(Array))
+			     result = temp;
+		    end		
+	   end
     if result then  return result.map {|k| k[:ma_sinh_vien] and k[:ma_sinh_vien].strip}
     else return [] end
   end
+  
   def count(client, ma_khoa_hoc, ma_he_dao_tao, ma_nganh, status)
     #keys = ["name","group","color","ma_sinh_vien","mamon","status"]
     keys = []
     svs = load_sv(client, ma_khoa_hoc, ma_he_dao_tao, ma_nganh, status)
     return nil if svs.count == 0   
-    sv = svs[0]    
-    tmp = RestClient.get "http://localhost:8181/get/#{sv}"
-    result = JSON.parse(tmp)["nodes"]  
-    #return 0 if result.nil
+    sv = svs[0]
+    begin    
+      tmp = RestClient.get "http://localhost:8181/get/#{sv}"
+      result = JSON.parse(tmp)["nodes"]
+     rescue Exception
+      return 0
+     end 
+         #return 0 if result.nil
 	return result.count    
   end
   def process(client, ma_khoa_hoc, ma_he_dao_tao, ma_nganh, status)
